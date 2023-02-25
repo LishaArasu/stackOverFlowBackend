@@ -1,5 +1,6 @@
 package com.queries.stackoverflowbackend.web;
 
+import com.queries.stackoverflowbackend.dto.CommentsDto;
 import com.queries.stackoverflowbackend.entity.Comments;
 import com.queries.stackoverflowbackend.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,30 +20,35 @@ public class CommentsController {
     @Autowired
     CommentService commentService;
 
+    public CommentsController(CommentService commentService) {
+        this.commentService = commentService;
+    }
+
     @GetMapping("/by-id")
-    public ResponseEntity<Comments> getCommentDetails(@RequestParam Long commentId) {
+    public ResponseEntity<CommentsDto> getCommentDetails(@RequestParam Long commentId) {
         log.info("End point to fetch comment details by id");
-        Comments commentDetails = commentService.getCommentDetails(commentId);
+        CommentsDto commentDetails = commentService.getCommentDetails(commentId);
         return new ResponseEntity<>(commentDetails, HttpStatus.OK);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addCommentDetails(@RequestBody Comments comment) {
+    public ResponseEntity<Comments> addCommentDetails(@RequestBody Comments comment) {
         log.info("End point to add comment details");
-        return new ResponseEntity<>("Comment Detail added succesfully", HttpStatus.OK);
+        Comments comments = commentService.addCommentDetails(comment);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
     @PostMapping("/feedback")
-    public ResponseEntity<String> updateUserFeedback(@RequestParam Long commentId, boolean feedback) {
+    public ResponseEntity<Comments> updateUserFeedback(@RequestParam Long commentId, boolean feedback) {
         log.info("End point to update user feedback");
-        commentService.updateUserFeedback(commentId, feedback);
-        return new ResponseEntity<>("Thank you for the feedback :)", HttpStatus.OK);
+        Comments comments = commentService.updateUserFeedback(commentId, feedback);
+        return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
     @GetMapping("/keyword")
-    public ResponseEntity<Optional<List<Comments>>> getCommentsForUser(@RequestParam String keyword) {
+    public ResponseEntity<Optional<List<CommentsDto>>> getCommentsForUser(@RequestParam String keyword) {
         log.info("End point to retrieve comment details");
-        Optional<List<Comments>> commentsList = commentService.getCommentsForUser(keyword);
+        Optional<List<CommentsDto>> commentsList = commentService.getCommentsForUser(keyword);
         return new ResponseEntity<>(commentsList, HttpStatus.OK);
     }
 

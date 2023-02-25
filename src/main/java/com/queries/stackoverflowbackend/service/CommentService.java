@@ -1,15 +1,17 @@
 package com.queries.stackoverflowbackend.service;
 
+import com.queries.stackoverflowbackend.dto.CommentsDto;
 import com.queries.stackoverflowbackend.entity.Comments;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CommentService {
-    Comments getCommentDetails(Long id);
+    CommentsDto getCommentDetails(Long id);
 
-    void addCommentDetails(Comments comment);
-    void updateUserFeedback(Long id, boolean feedback);
+    Comments addCommentDetails(Comments comment);
 
-    Optional<List<Comments>> getCommentsForUser(String keyword);
+    Comments updateUserFeedback(Long id, boolean feedback);
+
+    Optional<List<CommentsDto>> getCommentsForUser(String keyword);
 }
